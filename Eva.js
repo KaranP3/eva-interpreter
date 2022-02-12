@@ -46,7 +46,31 @@ export default class Eva {
     }
 
     // --------------------------------------
+    // Comparison operators:
+
+    if (exp[0] === ">") {
+      return this.eval(exp[1], env) > this.eval[(exp[2], env)];
+    }
+
+    if (exp[0] === ">=") {
+      return this.eval(exp[1], env) >= this.eval[(exp[2], env)];
+    }
+
+    if (exp[0] === "<") {
+      return this.eval(exp[1], env) < this.eval[(exp[2], env)];
+    }
+
+    if (exp[0] === "<=") {
+      return this.eval(exp[1], env) <= this.eval[(exp[2], env)];
+    }
+
+    if (exp[0] === "=") {
+      return this.eval(exp[1], env) === this.eval[(exp[2], env)];
+    }
+
+    // --------------------------------------
     // Block: sequence of expressions
+
     if (exp[0] === "begin") {
       const blockEnv = new Environment({}, env);
       return this._evalBlock(exp, blockEnv);
@@ -62,13 +86,26 @@ export default class Eva {
 
     // --------------------------------------
     // Variable update: (set foo 10)
+
     if (exp[0] === "set") {
       const [_, name, value] = exp;
       return env.assign(name, this.eval(value, env));
     }
 
     // --------------------------------------
+    // if-expression:
+
+    if (exp[0] === "if") {
+      const [_tag, condition, consequent, alternate] = exp;
+      if (this.eval(condition, env)) {
+        return this.eval(consequent, env);
+      }
+      return this.eval(alternate, env);
+    }
+
+    // --------------------------------------
     // Variable access: foo
+
     if (isVariableName(exp)) {
       return env.lookup(exp);
     }

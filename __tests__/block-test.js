@@ -1,6 +1,9 @@
 import assert from "assert";
+import testUtil from "./test-util.js";
 
 export default (eva) => {
+  // Blocks: group of expressions
+
   assert.strictEqual(
     eva.eval([
       "begin",
@@ -10,6 +13,8 @@ export default (eva) => {
     ]),
     230
   );
+
+  // Nested environments
 
   assert.strictEqual(
     eva.eval([
@@ -21,6 +26,9 @@ export default (eva) => {
     10
   );
 
+  // Access parent variables:
+  // Identifier resolution
+
   assert.strictEqual(
     eva.eval([
       "begin",
@@ -31,6 +39,8 @@ export default (eva) => {
     20
   );
 
+  // Update parent variables
+
   assert.strictEqual(
     eva.eval([
       "begin",
@@ -39,5 +49,16 @@ export default (eva) => {
       "data",
     ]),
     100
+  );
+
+  testUtil.test(
+    eva,
+    `
+    (begin
+      (var x 10)
+      (var y 20)
+      (+ (* x 10) y))
+  `,
+    120
   );
 };

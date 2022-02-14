@@ -1,11 +1,11 @@
 import Eva from "../Eva.js";
-import Environment from "../Environment.js";
 import selfEvalTest from "./self-eval-test.js";
 import mathTest from "./math-test.js";
 import variablesTest from "./variables-test.js";
 import blockTest from "./block-test.js";
 import ifTest from "./if-test.js";
 import whileTest from "./while-test.js";
+import builtInFunctionTest from "./built-in-function-test.js";
 
 const tests = [
   selfEvalTest,
@@ -14,19 +14,13 @@ const tests = [
   blockTest,
   ifTest,
   whileTest,
+  builtInFunctionTest,
 ];
 
-const eva = new Eva(
-  new Environment({
-    null: null,
-
-    true: true,
-    false: false,
-
-    VERSION: 0.1,
-  })
-);
+const eva = new Eva();
 
 tests.forEach((test) => test(eva));
+
+eva.eval(["print", '"Hello"', '"World!"']);
 
 console.log("All assertions passed");
